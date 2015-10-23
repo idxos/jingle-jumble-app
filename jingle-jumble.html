@@ -1,0 +1,383 @@
+
+<!DOCTYPE html>
+<html>
+ <head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <title>Jingle Jumble</title>
+   <link rel="stylesheet" type="text/css" href="//cloud.typography.com/6819872/783664/css/fonts.css" />
+   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+   <link href="examples/fixed-positioning.css" rel="stylesheet" type="text/css" />
+   <link href="examples/main.css" rel="stylesheet" type="text/css" />
+   <link href="app/theme/css/jingle-styles.css" rel="stylesheet" type="text/css" />
+
+   <style>
+h11 {
+  animation-duration: 3s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 300%; 
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
+}
+
+   </style>
+
+
+
+
+
+ <script type="text/javascript">
+
+/* This script and many more are available free online at
+The JavaScript Source!! http://www.javascriptsource.com
+Created by: Ilya Gerasimenko | http://www.gerasimenko.com */
+
+// Text to type
+var stringOfText1 = '... with a new string of text. Convenient for those "read more..." links.';
+var stringOfText2 = ' spots on the same page; the animations will be consecutive.';
+var stringOfText3 = 'Click (and keep clicking) here to retype this text over and over. You don\'t have to, but you can.';
+
+// Animation
+var textHolder;
+var textTarget;
+var letter;
+var index;
+var printing;
+var waiting = false;
+
+// Start
+
+spellString = function (oId,str) {
+  if (waiting == false) {
+      index = 0;
+      waiting = true;
+      textTarget = document.getElementById(oId);
+      textTarget.innerHTML = '';
+      textHolder = str.split('');
+      sendToPrint();
+  }
+}
+
+// Animation
+
+sendToPrint = function () {
+  if (index<textHolder.length) {
+     printing = window.setTimeout(
+       function () {
+            getLetter(textTarget,index); 
+      },  1);
+  } else {
+     waiting = false;
+  }
+}
+
+getLetter = function (textTarget,index) {
+  letter = document.createTextNode(textHolder[index]);
+  if (letter.value == '\\') letter.value = '';
+  printLetter(textTarget,letter);
+}
+
+printLetter = function (textTarget,letter) {
+  textTarget.appendChild(letter);
+   window.clearTimeout(printing);
+   index++;
+   sendToPrint();
+}
+
+
+// Created by: Simon Willison | http://simon.incutio.com/
+function addLoadEvent(func) {
+  var oldonload = window.onload;
+  if (typeof window.onload != 'function') {
+    window.onload = func;
+  } else {
+    window.onload = function() {
+      if (oldonload) {
+        oldonload();
+      }
+      func();
+    }
+  }
+}
+  
+addLoadEvent( function () {
+    document.getElementById('clickhere1').onclick = function () {
+          spellString('typehere1',stringOfText1);
+      }
+    document.getElementById('clickhere2').onclick = function () {
+          spellString('typehere2',stringOfText2);
+      }
+    document.getElementById('keepclicking').onclick = function () {
+          spellString('keepclicking',stringOfText3);
+      }
+  }
+);
+
+
+ </script>
+ </head>
+<body>
+<!--
+ <div id="bg1" data-0="background-position:0px 0px;" data-end="background-position:-500px -10000px;"></div>
+ <div id="bg2" data-0="background-position:0px 0px;" data-end="background-position:-500px -8000px;"></div>
+ <div id="bg3" data-0="background-position:0px 0px;" data-end="background-position:-500px -6000px;"></div>
+-->
+<div id="bg1" data-0="background-position:0px 0px;" data-end="background-position:-500px -10000px;"></div>
+<div id="bg2" data-0="background-position:0px 0px;" data-end="background-position:-500px -8000px;"></div>
+<div id="bg3" data-0="background-position:0px 0px;" data-end="background-position:-500px -6000px;"></div>
+
+
+<div class="container">
+  <div class="row">
+    <section class="col-lg-2 hidden-md hidden-sm hidden-md"></section>
+    <section class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+
+      <div id="main" class="main">
+        
+          <button class="btn btn-default" id="clickhere1">Click Here 1</button>
+
+
+
+
+
+     <!-- <div id="content" class"hidden">
+        <img src="https://dl.dropbox.com/u/5381777/wip/img/matrix.png" /><br/>
+        <div id="msg">Sorry, we are hacking the binary.</div><br/><br/>
+        <div id="please">Please try again in a few minutes.</div>
+
+      </div>-->
+
+
+
+    </section>
+    <section class="col-lg-2 hidden-md hidden-sm hidden-md"></section>
+  </div>
+</div>
+
+  
+  <script type="text/javascript" src="dist/skrollr.min.js"></script>
+  <script type="text/javascript">
+  
+
+  var phrases = [
+
+    ["Happy Holidays", "Aloha Dippy Shy", "Ladyship Ya Hop", "Daily Happy Ohs", "Shady Hay I Plop",  "Dial Pay Hop Shy"],
+    ["Joy and Peace", "A Pecan Joyed", "Daily Happy Ohs", "Shady Hay I Plop", "Dial Pay Hop Shy"],
+    ["Merry and Bright", "Band Tiger Myrrh", "Breath Drying Mr", "Grab Nerdy Mirth", "Agent Bird Myrrh", "Mr Bath Nerdy Rig"],
+    ["Hope and Joy", "A Dopey John", "Pay John Doe", "Jade Hypo No", "Hop Ad Enjoy"],
+    ["Happy New Year", "Hyena Awry Pep", "Napper Way Hey", "A Yarn Peep Why", "Away He Pen Pry"],
+    ["Calm and Bright", "Brag Latch Mind", "Barn Mad Giltch", "Bald ag Inch Mr", "Clad Hang Bit Mr"],
+    ["Happy Everything", "Gather Envy Hippy", "Vegan He Pithy Pry", "Gravy He Ten Hippy"],
+    ["Jingle Bells", "Bell Lens Jig", "Nib Leg Jells", "Bin Gels Jell", "Big Jell Lens"],
+    ["Holiday Cheer", "Yea Chloride", "Each Idyl Hero", "Achy Deli Hoer", "El Heady Choir", "Ahoy Chile Red", "A Echo Idly Her"],
+    ["Tis The Season", "Hesitate Sons", "Instate Shoes", "Stashes Tie On", "Siesta To Hens"],
+    ["Enjoy Every Moment", "Yeomen Never Jot My", "Emote Over My Jenny", "Joey Memo Rent Envy", "Mere One Envy Jot My"]
+
+  ];
+
+  var _maxRand = 10; //set to 10 becase we have a total of 10 objects using sp as primark key
+  var _minRand = 0;
+  var newRand;
+
+    function getRand() {
+      var newRand = Math.floor((Math.random() * _maxRand) + 0); // returns a random number between 1 and 2 for demo purposes
+      return newRand;
+    }
+    // 'return NewRand' supplies us with a fresh random number.
+    // Now assign our new random number to var ri so we can get .length();
+    var r1 = getRand(newRand);
+
+console.log("The First rand:" +r1);
+    //success
+    // we use r1's getRand() number and use it as an id to select the SecretPhrase and it's different variations of the encoded message
+   
+
+    var randRowId = r1;
+    console.log("The First rand:" +r1);
+    // success it returns our random number stored in r1
+    //console.log(randRowId);
+
+
+
+      /* MASTER PHRASE OBJECT CONSTRUCTOR */
+      function Phrase(ep, sp){
+           this.ep = ep;
+           this.sp = sp;
+      }
+
+    Phrase.prototype.logEncodedPhrase = function() {
+    //console.log("The Encoded Phrase is:" , this.ep);
+    }
+
+    Phrase.prototype.logSecretPhrase = function() {
+    //console.log("The SecretPhrase is:" , this.sp);
+    }
+
+
+
+
+    var a = 0;
+    var b = 0;
+    var c = 0;
+    var d = 0;
+    var r2;
+
+    function matchPhrases() {
+
+        var rId = r1;  //select Array's row using r1 as our id
+
+        console.log("r1: " +r1);
+
+        var x = phrases[rId].length;  // x is holding total count of available encodedPhrases 
+        
+        console.log("Total items in this array " + x);
+        
+        var _maxRand = x;  //  Set our new _maxRand to the length of our Array.  
+                          //  We want a random number, but can not be higher than our Array.length because 
+                          //  we are going to use the result as our id to choose random "ep"
+        
+
+        var r2 = getRand(newRand);
+
+        console.log("The new rand is:" + r2);
+
+      //console.log(r2);
+      //console.log(_maxRand);
+      //console.log(r2);
+      //console.log(x);
+      //console.log(phrases[r2]);
+    }
+
+
+    matchPhrases();
+    // we are going to use our r1 var from earlier to dynamically pick up row
+    //  var p1 = new Phrase(phrases[0][0], phrases[0][1]);
+
+
+var sp = phrases[r1][0];
+var ep = phrases[r1][r2];
+
+
+var sp = phrases[0][0];
+var ep = phrases[0][1];
+
+
+
+alert(ep);
+
+console.log("sp: " +sp );
+console.log("ep: " +ep );
+
+
+    var p1 = new Phrase(sp, ep);
+
+
+
+    //console.log(p1);
+
+
+    p1.logSecretPhrase();
+    p1.logEncodedPhrase();
+
+
+    // TODO... remove '0' from possible values that r2's rand will return.  O is the ID for our "SecretPhrase" and cannot be the "encodedPhrase" too.
+//console.log(p1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+    if (rand == 1) var g1 = {encodedPhrase: ep[0], secretPhrase: sp[0]};
+    if (rand == 2) var g1 = {encodedPhrase: ep[1], secretPhrase: sp[0]};
+    */
+
+
+    function mergeAlternating(ep, sp) {
+      var mergedArray = [];
+
+      for (var i = 0, len = Math.max(ep.length, sp.length); i < len; i++) {
+          if (i < ep.length) {
+              mergedArray.push(ep[i]);
+          }
+          if (i < sp.length) {
+              mergedArray.push(sp[i]);
+          }
+      }
+      console.log(mergedArray);
+      return mergedArray;
+    }
+
+
+
+
+      var x = 0;
+      var m = 40;
+      var myFunc = function (result) {
+
+      for (var i = 0; i < result.length; i += 1) {
+
+      x += 1000;
+
+      a = x + 1000;
+      b = x + 2000;
+      c = x + 0;
+      d = x + 1000;
+      ml = m + 5;
+
+
+      // put our letters inside of <div id="demo"></div>
+      document.getElementById('main').innerHTML +=
+
+      '<div id="message"'+'data-'+a+'="opacity:1;top:20%;margin-left:' +m+'px;" '+'data-'+b+'="opacity:0;top:-20%;">'+
+      '<h1 id="encoded">'+result[i].charAt(0)+'</h1>'+
+      '</div>'+
+
+      '<div id="message"'+'data-'+c+'="opacity:0;top:100%;margin-left:' +ml+'px;" '+'data-'+d+'="opacity:1;top:20%;">'+
+      '<h1 id="decoded">'+result[i].charAt(0)+'</h1>'+
+      '</div>';
+
+      console.log(result[i].charAt(0));
+
+
+      m += 40;
+
+  }
+  myFunc();
+}
+
+
+
+ </script>
+ <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+ <script type="text/javascript" src="app/js/app.js"></script>
+ <script type="text/javascript">
+
+   skrollr.init({
+      edgeStrategy: 'set'
+  });
+ </script>
+
+
+</body>
+</html>

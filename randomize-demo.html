@@ -1,0 +1,69 @@
+string := "Because the cipher doesn't change any of the characters, the ciphertext will have exactly the same letter frequencies as the underlying plaintext. This means that the cipher can in many cases be identified as a transposition by the close similarity of its letter statistics with the letter frequencies of the underlying language."
+
+password := "open sesame"
+key := _createkey(password)
+scrambled := _scramble(string, key)
+restored := _scramble(scrambled, _reverse(key))
+
+msgbox, Plaintext:`n"%string%"`n`nScrambled:`n"%scrambled%"`n`nRestored:`n"%restored%"
+
+_scramble(string, key)
+ {
+   loop, parse, key
+    {
+      string := _swap(string, a_loopfield)
+    }
+   return string
+ }
+
+_swap(input, segment)
+ {
+   stringlen, length, input
+   loop, % length / segment + 1
+    {
+      piece := substr(input, 1, segment)
+      stringtrimleft, input, input, %segment%
+      reversed := _reverse(piece)
+      output .= reversed
+    }
+   return output
+ }
+
+_reverse(input)
+ {
+   stringsplit, character, input
+   count := character0 + 1
+   loop, %character0%
+    {
+      count--
+      output .= character%count%
+    }
+   return output
+ }
+
+_createkey(key)
+ {
+   seed := _hash(key)
+   random, , %seed%
+   loop, 100
+    {
+      random, ran, 2, 9
+      newkey .= ran
+    }
+   return newkey
+ }
+
+_hash(string)
+ {
+   ;Function provided by Linear Spoon
+   ;http://www.autohotkey.com/board/topic/90389-max-integer-size-for-newseed-option-of-random-command/#entry571913
+   ;Implements the FNV1a hash found at the link below
+   ;There are quite a few other hash functions found on the same page
+   ;http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx
+
+   VarSetCapacity(h, 4, 0)
+   NumPut(2166136261, h, 0, "uint")
+   Loop, % StrLen(string)
+      NumPut( 16777619 * (NumGet(h, 0, "uint") ^ Asc(SubStr(string, A_Index, 1))), h, 0, "uint")
+   return NumGet(h, 0, "uint")
+ }
