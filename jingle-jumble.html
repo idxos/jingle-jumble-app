@@ -163,12 +163,9 @@ addLoadEvent( function () {
     <section class="col-lg-2 hidden-md hidden-sm hidden-md"></section>
   </div>
 </div>
-
-  
   <script type="text/javascript" src="dist/skrollr.min.js"></script>
   <script type="text/javascript">
   
-
   var phrases = [
 
     ["Happy Holidays", "Aloha Dippy Shy", "Ladyship Ya Hop", "Daily Happy Ohs", "Shady Hay I Plop",  "Dial Pay Hop Shy"],
@@ -191,19 +188,17 @@ addLoadEvent( function () {
 
     function getRand() {
       var newRand = Math.floor((Math.random() * _maxRand) + 0); // returns a random number between 1 and 2 for demo purposes
-      return newRand;
+      
+        return newRand;
     }
     // 'return NewRand' supplies us with a fresh random number.
     // Now assign our new random number to var ri so we can get .length();
     var r1 = getRand(newRand);
-
-console.log("The First rand:" +r1);
+    //console.log("The First rand:" +r1);
     //success
     // we use r1's getRand() number and use it as an id to select the SecretPhrase and it's different variations of the encoded message
-   
-
     var randRowId = r1;
-    console.log("The First rand:" +r1);
+    //console.log("The First rand:" +r1);
     // success it returns our random number stored in r1
     //console.log(randRowId);
 
@@ -249,7 +244,7 @@ console.log("The First rand:" +r1);
 
         var r2 = getRand(newRand);
 
-        console.log("The new rand is:" + r2);
+        console.log("The new rand is: " + r2);
 
       //console.log(r2);
       //console.log(_maxRand);
@@ -273,15 +268,14 @@ var ep = phrases[0][1];
 
 
 
-alert(ep);
+//alert(ep);
 
 console.log("sp: " +sp );
 console.log("ep: " +ep );
 
 
     var p1 = new Phrase(sp, ep);
-
-
+    var p2 = new Phrase(sp, ep);
 
     //console.log(p1);
 

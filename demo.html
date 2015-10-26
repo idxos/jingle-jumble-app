@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Jingle Jumble</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!--
+    <link href="examples/fixed-positioning.css" rel="stylesheet" type="text/css" />
+    <link href="examples/main.css" rel="stylesheet" type="text/css" />
+    -->
+    <link href="app/theme/css/jingle-styles.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="app/css/animate.css">
+    <style>
+        #eventView {
+            height: 50px;
+            width:50px;
+        }
+        .em-tp-25 {
+            margin-top: 5%;
+        }
+        h1 {
+            text-align:center;
+            font-size: 24px;
+        }
+        h2 {
+            text-align:center;
+            font-size:20px;
+        }
+        .hidden {
+            display: none;
+        }
+
+.blue-me {
+    background-color: blue;
+    color: white;
+
+}
+
+.myGoAway {
+    background-color: blue;
+    color: white;
+    height: 100px;
+    width: 200px;
+    position: absolute;
+    -webkit-animation: goAway 1s infinite; /* Chrome, Safari, Opera */ 
+    animation: goAway 1s infinite;
+    animation-iteration-count: 3;
+    }
+
+    @-webkit-keyframes goAway {
+        0%   {top: -200px; left: 0px; opacity: 1;}
+        100% {top: 0px; left: 0px; opacity: 0;}
+    }
+
+    /* Standard syntax */
+    @keyframes goAway {
+        0%   {top: -200px; left: 0px; opacity: 1;}
+        100% {top: 0px; left: 0px; opacity: 0;}
+    }
+
+.myAppear {
+    position: relative;
+    -webkit-animation: appear .5s infinite; /* Chrome, Safari, Opera */ 
+    animation: appear .5s infinite;
+    animation-iteration-count: 1;
+    }
+
+    @-webkit-keyframes appear {
+        0%   {top: 25px; left: 0px; opacity: 0;}
+        100% {top: 0px; left: 0px; opacity: 1;}
+    }
+
+    /* Standard syntax */
+    @keyframes appear {
+        0%   {top: 25px; left: 0px; opacity: 0;}
+        100% {top: 0px; left: 0px; opacity: 1;}
+    }
+
+.scroll-view {
+    background-color: darkkhaki;
+    min-height: 350px;
+    width:100%;
+}
+
+    </style>
+
+</head>
+<body>  
+<div class="container">
+
+    <div class="row">
+        <section class="col-xs-12">
+
+            <h1 class="animated fadeInUp">The current ep: <small id="epView"></small></h1>
+            <h1 class="animated fadeInUp">The Current tp: <small id="tpView"></small></h1> 
+            <h1 class="animated fadeInUp">The current sp: <small id="spView"></small></h1>
+
+            <h1 class="myGoAway">YOYOYO</h1>
+        </section>
+
+
+        <section class="em-tp-25 col-xs-12 ">
+            <h1 id="message" class=""></h1>
+            <h2 class="hidden" onClick="toggleClass(this)">SAMMY</h2>
+        </section>
+
+        <section id="gameActionsArea" class="col-xs-12"></section>
+
+    </div>
+    <div class="row">
+        <section class="col-xs-9">
+
+            <div id="eventArea"></div>
+            <div id="eventView"></div>
+
+        </section>
+        <section class="col-xs-3">
+            <div id="scrollView" class="scroll-view container">
+                
+            </div>
+        </section>    
+    </div>
+
+</div>
+  
+
+
+<div class="container hidden">
+    <div class="row">
+        <section class="col-xs-12">
+            <p class="well">
+                remaining letters in this.phrase([sp][ep])
+                ep => print to screen on page load.
+                sp => hudden to screen 
+                startButton => print to screen ==> button.onClick( startScramble ;
+            </p>
+        </section>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+
+    var phrases = [
+        ["Happy Holidays", "Aloha Dippy Shy", "Ladyship Ya Hop", "Daily Happy Ohs", "Shady Hay I Plop", "Dial Pay Hop Shy"],
+        ["Joy and Peace", "A Pecan Joyed", "Daily Happy Ohs", "Shady Hay I Plop", "Dial Pay Hop Shy"],
+        ["Merry and Bright", "Band Tiger Myrrh", "Breath Drying Mr", "Grab Nerdy Mirth", "Agent Bird Myrrh", "Mr Bath Nerdy Rig"],
+        ["Hope and Joy", "A Dopey John", "Pay John Doe", "Jade Hypo No", "Hop Ad Enjoy"],
+        ["Happy New Year", "Hyena Awry Pep", "Napper Way Hey", "A Yarn Peep Why", "Away He Pen Pry"],
+        ["Calm and Bright", "Brag Latch Mind", "Barn Mad Giltch", "Bald ag Inch Mr", "Clad Hang Bit Mr"],
+        ["Happy Everything", "Gather Envy Hippy", "Vegan He Pithy Pry", "Gravy He Ten Hippy"],
+        ["Jingle Bells", "Bell Lens Jig", "Nib Leg Jells", "Bin Gels Jell", "Big Jell Lens"],
+        ["Holiday Cheer", "Yea Chloride", "Each Idyl Hero", "Achy Deli Hoer", "El Heady Choir", "Ahoy Chile Red", "A Echo Idly Her"],
+        ["Tis The Season", "Hesitate Sons", "Instate Shoes", "Stashes Tie On", "Siesta To Hens"],
+        ["Enjoy Every Moment", "Yeomen Never Jot My", "Emote Over My Jenny", "Joey Memo Rent Envy", "Mere One Envy Jot My"]
+    ];
+
+
+   // console.log(phrases[0]);
+
+var _maxRand = phrases.length; //set to 10 becase we have a total of 10 objects using sp as primary key
+var _minRand = 0;
+var newRand;
+
+function getRand() {
+    var newRand = Math.floor((Math.random() * _maxRand) + 0); // returns a random number between 1 and 2 for demo purposes
+    return newRand;
+}
+
+var r1 = getRand(newRand);
+var r2;
+var rId = r1;  
+var x = phrases[rId].length;  
+var _maxRand = x;  
+var r2 = getRand(newRand);
+
+    if ( r2 == 0 ) { r2 ++ }
+
+var r3 = getRand(newRand);
+//console.log("r3: ", +r3);
+//console.log("r1: " +r1);
+
+
+//console.log("Heeeeeeeeeeyyyyy: ", phrases[r1][0], phrases[r1][r2]);
+
+
+
+
+
+
+/* MASTER PHRASE OBJECT CONSTRUCTOR */
+function Phrase(sp, ep) {
+     var phrase = this;
+     this.sp = sp;
+     this.ep = ep;
+     this.used = ep;
+ }
+
+
+    Phrase.prototype.addUsed = function() {
+        //console.log("This sp: : " + this.sp  );        
+        //console.log("This ep: " + this.ep  );
+        //this.used.pop(this.ep);
+        //console.log("Used:  " + this.used);
+
+
+
+
+    }
+
+    Phrase.prototype.logSecretPhrase = function() {
+        console.log("The Secret Phrase is:" , this.sp);
+        var phraseString = this.sp;
+        //console.log("The Secret Phrase is:" , phraseString);
+        var phraseString = this.sp.toString();
+        var phraseStringLength = phraseString.length;
+        var newDecoded = phraseString.split();
+        //console.log(newDecoded);
+    }
+
+    Phrase.prototype.epString = function() {
+    
+        var phraseString = this.ep;
+        var phraseString = this.ep.toString();
+
+        //console.log(phraseString);
+            
+    }
+
+
+    Phrase.prototype.logEncodedPhrase = function() {
+       // console.log("The Encoded Phrase is:" , this.ep);
+        var phraseString = this.ep;
+        var phraseString = this.ep.toString();
+        var phraseStringLength = phraseString.length;
+        var res = phraseString.toLocaleLowerCase();
+    }
+
+
+    Phrase.prototype.spellString = function (oId,str) {
+   
+        if (waiting == false) {
+            index = 0;
+            waiting = true;
+            textTarget = document.getElementById(oId);
+            textTarget.innerHTML = '';
+            textHolder = str.split('');
+            
+            alert("sendToPrint();");
+        }
+    }
+
+    Phrase.prototype.alertTest = function() {
+        alert("Alert me something beeeeoch!");
+
+    }
+
+    Phrase.prototype.shuffle = function () {
+
+        var currentIndex = this.phrase.length;
+        var temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = this.phrase[currentIndex];
+        this.phrases[currentIndex] = this.phrases[randomIndex];
+        this.phrases[randomIndex] = temporaryValue;
+    }
+}
+
+
+
+var p1 = new Phrase( phrases[r1][0], phrases[r1][r2]);
+
+p1.addUsed();
+
+var upperEp = p1.ep.toLocaleUpperCase();
+//console.log(upperEp);
+//p1.spellString();
+//console.log("This is p1.ep.toLocaleUpperCase()" + p1.ep.toLocaleUpperCase());
+
+
+
+
+//
+////  MAIN DATA TO WORK WITH ////
+var s = p1.sp.toLocaleUpperCase();
+var e = p1.ep.toLocaleUpperCase();
+////
+//
+
+
+var myFunc = function(s, e) {
+
+    var spLettersArr = [];
+    var epLettersArr = [];
+
+    for (var i = 0; i < s.length; i++) {
+        var total = spLettersArr.push(s.charAt(i));
+    }
+
+    for (var i = 0; i < e.length; i++) {
+        var total = epLettersArr.push(e.charAt(i));
+    }
+
+
+//alert(spLettersArr);
+//H,A,P,P,Y, ,E,V,E,R,Y,T,H,I,N,G
+      //  console.log("S Letters Arr: ", spLettersArr); // ['soccer', 'baseball', 'football', 'swimming']
+      //  console.log("E Letters Arr: ", epLettersArr); // ['soccer', 'baseball', 'football', 'swimming']
+      //  console.log("Total: ", total);  // 4
+
+
+
+}
+myFunc(s, e);
+
+
+//alert(s);
+//alert(t);
+
+//console.log("SP letters arry rtn: ", s);
+//console.log("EP letters arry rtn: ", e[2], e[3], e[6], e[0]);
+
+/*
+
+function sayMessage() {
+    var messageDisplay = document.getElementById('message');
+    var message = this.message;   
+    messageDisplay.innerHTML = message;
+}
+sayMessage();
+
+
+
+function toggleClass(el){
+    if(el.className == "animated fadeInUp"){
+        el.className = "animated fadeOutUp";
+    } else {
+        el.className = "animated fadeInUp";
+    }
+}
+*/
+
+
+function toggleClass(el){
+    if(el.className == "myAppear"){
+        el.className = "myGoAway";
+    } else {
+        el.className = "myAppear";
+    }
+}
+
+
+
+function startScramble() {
+    //alert("The scramble as begun!");
+    var epView = document.getElementById('epView');
+    var spView = document.getElementById('spView');
+    var tpView = document.getElementById('tpView');
+
+    var scrollView = document.getElementById("scrollView").style.overflow = "scroll";
+    var hiddenSpView = document.getElementById("spView").style.display = "hidden";
+
+    //console.log("SP letters arry rtn: ", s);
+    //console.log("EP letters arry rtn: ", e[2], e[3], e[6], e[0]);
+
+
+
+/*
+function stopLetters() {
+    clearInterval(myFunction);
+}
+stopLetters();
+
+
+function addLetters(){
+
+    var i = 0;
+
+        function myFunction(){
+
+        setInterval(function() {    
+            
+            //document.getElementById('epView')
+                
+                    epView.innerHTML += e[i++];
+                
+                //.innerHTML += e[i++];    // get the item and increment
+                 if (i == e.length)
+                    alert("stop!");
+                    stopLetters;
+                    // reset to first element if you've reached the end
+        }, 400);  
+    }
+    myFunction();
+}
+addLetters();
+
+var i = 0;
+while (i < 10) {
+    document.getElementById("demo").innerHTML += i + "<br>";
+    i++;
+}
+*/
+       
+
+    function shuffle() {
+        var currentIndex = this.e.length;
+        //console.log(currentIndex);
+        var temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            //        console.log("Random: ", randomIndex);
+            //                console.log("Current: ", currentIndex);
+            
+            // And swap it with the current element.
+            temporaryValue = this.e[currentIndex];
+            // console.log(temporaryValue);
+            this.e[currentIndex] = this.e[randomIndex];
+            this.e[randomIndex] = temporaryValue;
+            
+            
+            console.log("temporaryValue: ", temporaryValue);
+            console.log("randomIndex: ", randomIndex);
+            
+            var temporaryValue = temporaryValue;
+
+        
+            tpView.innerHTML +=  temporaryValue
+        
+        
+        }
+    }
+    shuffle();
+
+
+
+
+
+
+function sayMessage() {
+    var messageDisplay = document.getElementById('message');
+    var message = this.s[1]+ " NEXT: " + this.e;   
+    
+    spView.classList.add("myAppear");
+    epView.classList.add("myAppear");
+    tpView.classList.add("myAppear");
+
+    messageDisplay.innerHTML = message;
+}
+sayMessage();
+
+
+
+
+function scrambleLetters() {
+
+    var epView = document.getElementById('epView');
+    
+    var message =  
+
+   // var myAppear = spView.classList.add("myAppear");
+    //spView.innerHTML = myAppear;
+
+        i = 0;
+        setInterval(function() {    
+            
+            //document.getElementById('epView')
+                    
+                    epView.innerHTML += e[i++];
+                
+                //.innerHTML += e[i++];    // get the item and increment
+                 if (i == e.length)
+                    alert("stop!");
+                    // reset to first element if you've reached the end
+        }, 400);  
+
+
+    epView.innerHTML = message;
+}
+scrambleLetters();
+
+
+
+
+function sAppear() {
+    
+    var myAppear = spView.classList.add("myAppear");
+    //spView.innerHTML = myAppear;
+}
+sAppear();
+
+
+
+
+
+   // var messageEpDisplay = e;
+    var messageSpDisplay = s;
+        document
+            .getElementById('spView')
+            .innerHTML =  messageSpDisplay;   
+
+        
+
+    epView.innerHTML = messageEpDisplay;
+    tpView.innerHTML = messageTpDisplay;
+    spview.innerHTML = messageSpDisplay;
+}
+
+
+function myFunction(){
+
+    alert("My Func!");
+
+}
+
+
+/*
+var spellString = function (oId,str) {
+    if (waiting == false) {
+        index = 0;
+        waiting = true;
+        textTarget = document.getElementById(oId);
+        textTarget.innerHTML = '';
+        textHolder = str.split('');
+        sendToPrint();
+    }
+}
+*/
+// end of my script do the window on load stuff
+window.onload =  function () {
+    
+
+
+    
+    var startButton = document.createElement("input");
+        startButton.setAttribute("type", "button");
+        startButton.setAttribute("class", "btn btn-default btn-lg");
+        startButton.setAttribute("value", "Start Scramble");
+        startButton.onclick = function () {
+            startScramble();
+    };
+
+    
+    
+
+document.getElementById("gameActionsArea").appendChild(startButton);
+
+};
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </body>
+</html>
