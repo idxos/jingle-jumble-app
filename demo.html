@@ -84,6 +84,12 @@
     width:100%;
 }
 
+.blue-box {
+    color:blue;
+    height: 100px;
+    width: 100px;
+}
+
     </style>
 
 </head>
@@ -118,7 +124,13 @@
         </section>
         <section class="col-xs-3">
             <div id="scrollView" class="scroll-view container">
-                
+            <div id="blue-box" class="blue-box" onload="changeColor();">
+                <div id="my_box">
+                    <p>Hello World</p>
+                </div>
+
+  <button onclick="stopTextColor();">Stop</button>
+  </div>
             </div>
         </section>    
     </div>
@@ -480,7 +492,7 @@ function scrambleLetters() {
     //spView.innerHTML = myAppear;
 
         i = 0;
-        setInterval(function() {    
+      setInterval(function() {    
             
             //document.getElementById('epView')
                     
@@ -489,6 +501,8 @@ function scrambleLetters() {
                 //.innerHTML += e[i++];    // get the item and increment
                  if (i == e.length)
                     alert("stop!");
+
+                
                     // reset to first element if you've reached the end
         }, 400);  
 
@@ -530,6 +544,24 @@ function myFunction(){
     alert("My Func!");
 
 }
+
+
+    var nIntervId;
+ 
+    function changeColor() {
+      nIntervId = setInterval(flashText, 1000);
+    }
+ 
+    function flashText() {
+      var oElem = document.getElementById("blue-box");
+      oElem.style.color = oElem.style.color == "red" ? "blue" : "red";
+    }
+ 
+    function stopTextColor() {
+      clearInterval(nIntervId);
+    }
+
+changeColor();
 
 
 /*
